@@ -7,6 +7,7 @@ const socketIo = require('socket.io');
 const connectDB = require('./config/db');
 const productRoutes = require('./routes/productRoutes');
 const cartRoutes = require('./routes/cartRoutes');
+const productController = require('./controllers/productController');
 
 const app = express();
 const server = http.createServer(app);
@@ -16,9 +17,12 @@ const io = socketIo(server);
 connectDB();
 
 // Configurar Handlebars como motor de plantillas
-app.engine('handlebars', exphbs.engine());
+app.engine('handlebars', exphbs.engine({
+    defaultLayout: 'main',
+    layoutsDir: __dirname + '/views/layouts'
+}));
 app.set('view engine', 'handlebars');
-app.set('views', './src/views');
+app.set('views', __dirname + '/views');
 
 // Middleware para parsear JSON
 app.use(express.json());
@@ -29,10 +33,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/carts', cartRoutes);
 
 // Ruta para la vista principal
-app.get('/', (req, res) => {
-    res.render('home'); 
-});
-
+app.get('/', productController.getAllProducts);
 
 io.on('connection', (socket) => {
     console.log('New client connected');

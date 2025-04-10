@@ -3,10 +3,32 @@ const Product = require('../models/Product');
 // Obtener todos los productos
 exports.getAllProducts = async (req, res) => {
     try {
-        const products = await Product.find(); // Obtener todos los productos de MongoDB
-        res.render('realTimeProducts', { products }); // Renderiza la vista con los productos
+        console.log('Intentando obtener productos...');
+        console.log('Modelo de Producto:', Product.modelName); // Verificar el nombre del modelo
+        console.log('Colección:', Product.collection.name); // Verificar el nombre de la colección
+
+        const products = await Product.find().lean();
+        
+        console.log('Productos encontrados (raw):', products);
+        console.log('Número de productos encontrados:', products.length);
+        console.log('Productos encontrados (detallado):', JSON.stringify(products, null, 2));
+
+        if (!products || products.length === 0) {
+            console.log('No se encontraron productos');
+        }
+
+        return res.render('home', { 
+            title: 'E-commerce',
+            products: products,
+            hasProducts: products.length > 0
+        });
     } catch (error) {
-        res.status(500).json({ status: 'error', message: error.message });
+        console.error('Error detallado al obtener productos:', error);
+        return res.status(500).render('home', {
+            title: 'E-commerce',
+            error: 'Error al cargar los productos: ' + error.message,
+            products: []
+        });
     }
 };
 
