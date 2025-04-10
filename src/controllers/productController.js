@@ -4,8 +4,8 @@ const Product = require('../models/Product');
 exports.getAllProducts = async (req, res) => {
     try {
         console.log('Intentando obtener productos...');
-        console.log('Modelo de Producto:', Product.modelName); // Verificar el nombre del modelo
-        console.log('Colección:', Product.collection.name); // Verificar el nombre de la colección
+        console.log('Modelo de Producto:', Product.modelName);
+        console.log('Colección:', Product.collection.name);
 
         const products = await Product.find().lean();
         

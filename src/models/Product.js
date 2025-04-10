@@ -11,11 +11,10 @@ const productSchema = new mongoose.Schema({
     thumbnails: { type: [String], default: [] }
 }, {
     timestamps: true,
-    strict: false, // Permite campos adicionales que puedan venir de MongoDB
-    collection: 'Products' // Especificar explícitamente el nombre de la colección
+    strict: false,
+    collection: 'Products'
 });
 
-// Middleware para logging
 productSchema.pre('find', function() {
     console.log('Ejecutando consulta en la colección:', this.model.collection.name);
 });
