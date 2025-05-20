@@ -12,12 +12,12 @@ const productSchema = new mongoose.Schema({
 }, {
     timestamps: true,
     strict: false,
-    collection: 'Products'
+    collection: 'products'
 });
 
 productSchema.pre('find', function() {
     console.log('Ejecutando consulta en la colección:', this.model.collection.name);
 });
 
-const Product = mongoose.model('Products', productSchema);
+const Product = mongoose.model('Product', productSchema);
 module.exports = Product;

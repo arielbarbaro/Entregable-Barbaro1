@@ -13,9 +13,18 @@ const initializePassport = () => {
         return token;
     };
 
+    // Estrategia para extraer el token del header de Authorization
+    const headerExtractor = req => {
+        let token = null;
+        if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+            token = req.headers.authorization.split(' ')[1];
+        }
+        return token;
+    };
+
     // Opciones para la estrategia JWT
     const options = {
-        jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
+        jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor, headerExtractor]),
         secretOrKey: process.env.JWT_SECRET
     };
 
